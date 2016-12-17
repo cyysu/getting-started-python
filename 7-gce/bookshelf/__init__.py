@@ -37,11 +37,10 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
 
     # Configure logging
     if not app.testing:
+    if not app.testing:
         client = google.cloud.logging.Client(app.config['PROJECT_ID'])
-        handler = CloudLoggingHandler(client)
-        # Attaches the handler to the root logger
-        setup_logging(handler)
-        logging.getLogger().setLevel(logging.INFO)
+        # Attaches a Google Stackdriver logging handler to the root logger
+        client.setup_logging(logging.INFO)
 
     # Setup the data model.
     with app.app_context():
